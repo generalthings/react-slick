@@ -36,7 +36,7 @@ var Slider = React.createClass({
     var query = json2mq({minWidth: breakpoints.slice(-1)[0]});
 
     this.media(query, function () {
-       this.setState({breakpoint: null});
+      this.setState({breakpoint: null});
     }.bind(this));
   },
   render: function () {
@@ -44,13 +44,25 @@ var Slider = React.createClass({
     var newProps;
     if (this.state.breakpoint) {
       newProps = _filter(this.props.responsive, {breakpoint: this.state.breakpoint});
-      settings = _assign({}, this.props, newProps[0].settings);
+      if (newProps[0].settings === 'unslick') {
+        settings = newProps[0].settings;
+      } else {
+        settings = _assign({}, this.props, newProps[0].settings);
+      }
     } else {
       settings = this.props;
     }
-    return (
-      <InnerSlider {...settings}/>
-    );
+
+    if (settings === 'unslick') {
+      // if 'unslicked' via responsive breakpoint, just render (pass-through) the nested HTML
+      return (
+        <div>{this.props.children}</div>
+      );
+    } else {
+      return (
+        <InnerSlider {...settings}/>
+      );
+    }
   }
 });
 

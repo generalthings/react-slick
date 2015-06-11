@@ -133,11 +133,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var newProps;
 	    if (this.state.breakpoint) {
 	      newProps = (0, _lodashFilter2['default'])(this.props.responsive, { breakpoint: this.state.breakpoint });
-	      settings = (0, _lodashAssign2['default'])({}, this.props, newProps[0].settings);
+	      if (newProps[0].settings === 'unslick') {
+	        settings = newProps[0].settings;
+	      } else {
+	        settings = (0, _lodashAssign2['default'])({}, this.props, newProps[0].settings);
+	      }
 	    } else {
 	      settings = this.props;
 	    }
-	    return _react2['default'].createElement(_innerSlider2['default'], settings);
+
+	    if (settings === 'unslick') {
+	      // if 'unslicked' via responsive breakpoint, just render (pass-through) the nested HTML
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        this.props.children
+	      );
+	    } else {
+	      return _react2['default'].createElement(_innerSlider2['default'], settings);
+	    }
 	  }
 	});
 
@@ -2729,53 +2743,55 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	  Copyright (c) 2015 Jed Watson.
 	  Licensed under the MIT License (MIT), see
 	  http://jedwatson.github.io/classnames
 	*/
 
-	function classNames () {
+	(function () {
 		'use strict';
 
-		var classes = '';
+		function classNames () {
 
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (!arg) continue;
+			var classes = '';
 
-			var argType = typeof arg;
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
 
-			if ('string' === argType || 'number' === argType) {
-				classes += ' ' + arg;
+				var argType = typeof arg;
 
-			} else if (Array.isArray(arg)) {
-				classes += ' ' + classNames.apply(null, arg);
+				if ('string' === argType || 'number' === argType) {
+					classes += ' ' + arg;
 
-			} else if ('object' === argType) {
-				for (var key in arg) {
-					if (arg.hasOwnProperty(key) && arg[key]) {
-						classes += ' ' + key;
+				} else if (Array.isArray(arg)) {
+					classes += ' ' + classNames.apply(null, arg);
+
+				} else if ('object' === argType) {
+					for (var key in arg) {
+						if (arg.hasOwnProperty(key) && arg[key]) {
+							classes += ' ' + key;
+						}
 					}
 				}
 			}
+
+			return classes.substr(1);
 		}
 
-		return classes.substr(1);
-	}
+		if (true) {
+			// AMD. Register as an anonymous module.
+			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else {
+			window.classNames = classNames;
+		}
 
-	// safely export classNames for node / browserify
-	if (typeof module !== 'undefined' && module.exports) {
-		module.exports = classNames;
-	}
-
-	/* global define */
-	// safely export classNames for RequireJS
-	if (true) {
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
-			return classNames;
-		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}
+	}());
 
 
 /***/ },
@@ -9995,9 +10011,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._responsiveMediaHandlers.push({query: query, handler: handler});
 	  },
 	  componentWillUnmount: function () {
-	    this._responsiveMediaHandlers.forEach(function(obj) {
-	      enquire.unregister(obj.query, obj.handler);
-	    });
+	    if (this._responsiveMediaHandlers) {
+	      this._responsiveMediaHandlers.forEach(function(obj) {
+	        enquire.unregister(obj.query, obj.handler);
+	      });
+	    }
 	  }
 	};
 
