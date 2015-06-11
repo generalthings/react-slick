@@ -54,7 +54,6 @@ var EventHandlers = {
         curY: posY
       }
     });
-    e.preventDefault();
   },
   swipeMove: function (e) {
     if (!this.state.dragging) {
@@ -82,11 +81,12 @@ var EventHandlers = {
     e.preventDefault();
   },
   swipeEnd: function (e) {
-    e.preventDefault();
-    if (!this.state.dragging) {
+    var touchObject = this.state.touchObject;
+    if (!this.state.dragging || !touchObject.swipeLength) {
       return;
     }
-    var touchObject = this.state.touchObject;
+    e.preventDefault();
+
     var minSwipe = this.state.listWidth/this.props.touchThreshold;
     var swipeDirection = this.swipeDirection(touchObject);
     this.setState({
@@ -94,10 +94,7 @@ var EventHandlers = {
       swipeLeft: null,
       touchObject: {}
     });
-    // Fix for #13
-    if (!touchObject.swipeLength) {
-      return;
-    }
+
     if (touchObject.swipeLength > minSwipe) {
       if (swipeDirection === 'left') {
         this.slideHandler(this.state.currentSlide + this.props.slidesToScroll);

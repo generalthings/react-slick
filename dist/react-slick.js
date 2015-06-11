@@ -3887,7 +3887,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        curY: posY
 	      }
 	    });
-	    e.preventDefault();
 	  },
 	  swipeMove: function (e) {
 	    if (!this.state.dragging) {
@@ -3915,11 +3914,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    e.preventDefault();
 	  },
 	  swipeEnd: function (e) {
-	    e.preventDefault();
-	    if (!this.state.dragging) {
+	    var touchObject = this.state.touchObject;
+	    if (!this.state.dragging || !touchObject.swipeLength) {
 	      return;
 	    }
-	    var touchObject = this.state.touchObject;
+	    e.preventDefault();
+
 	    var minSwipe = this.state.listWidth/this.props.touchThreshold;
 	    var swipeDirection = this.swipeDirection(touchObject);
 	    this.setState({
@@ -3927,10 +3927,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      swipeLeft: null,
 	      touchObject: {}
 	    });
-	    // Fix for #13
-	    if (!touchObject.swipeLength) {
-	      return;
-	    }
+
 	    if (touchObject.swipeLength > minSwipe) {
 	      if (swipeDirection === 'left') {
 	        this.slideHandler(this.state.currentSlide + this.props.slidesToScroll);
