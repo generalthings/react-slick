@@ -2699,6 +2699,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this.props.slideCount <= this.props.slidesToShow && this.props.infinite === false;
 	  },
 	  canSwipe: function (direction) {
+	    console.log('this.state.currentSlide = ' + this.state.currentSlide + ' this.props.slideCount = ' + this.props.slideCount);
 	    if (direction === 'left') {
 	      return this.props.infinite === true || this.state.currentSlide !== 0;
 	    } else if (direction === 'right') {
