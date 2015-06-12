@@ -2696,7 +2696,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return 'vertical';
 	  },
 	  isDraggingDisabled: function () {
-	    return slideCount <= this.props.slidesToShow && this.props.infinite === false;
+	    return this.state.slideCount <= this.props.slidesToShow && this.props.infinite === false;
 	  },
 	  canSwipe: function (direction) {
 	    console.log('this.state.currentSlide = ' + this.state.currentSlide + ' this.state.slideCount = ' + this.state.slideCount);
