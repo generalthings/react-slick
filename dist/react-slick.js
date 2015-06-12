@@ -2689,6 +2689,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return 'vertical';
 	  },
+	  isDraggingDisabled: function () {
+	    return this.props.slideCount <= this.props.slidesToShow && this.props.infinite === false;
+	  },
+	  canSwipe: function (direction) {
+	    if (direction === 'left') {
+	      return this.props.infinite === true || this.state.currentSlide !== 0;
+	    } else if (direction === 'right') {
+	      return this.props.infinite === true || this.state.currentSlide !== this.props.slideCount - 1;
+	    }
+	    return false;
+	  },
 	  autoPlay: function () {
 	    var play = function () {
 	      if (this.isMounted()) {
@@ -3889,12 +3900,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	  },
 	  swipeMove: function (e) {
-	    if (!this.state.dragging) {
+	    if (this.isDraggingDisabled()) {
+	      e.preventDefault();
+	    }
+	    if (!this.state.dragging || this.state.animating || this.isDraggingDisabled()) {
 	      return;
 	    }
-	    if (this.state.animating) {
-	      return;
-	    }
+
 	    var swipeLeft;
 	    var curLeft, positionOffset;
 	    var touchObject = this.state.touchObject;
@@ -3928,7 +3940,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      touchObject: {}
 	    });
 
-	    if (touchObject.swipeLength > minSwipe) {
+	    if (touchObject.swipeLength > minSwipe && this.canSwipe(swipeDirection)) {
 	      if (swipeDirection === 'left') {
 	        this.slideHandler(this.state.currentSlide + this.props.slidesToScroll);
 	      } else if (swipeDirection === 'right') {
