@@ -97,6 +97,7 @@ var EventHandlers = {
     });
 
     if (touchObject.swipeLength > minSwipe && this.canSwipe(swipeDirection)) {
+      console.log('we are swiping');
       if (swipeDirection === 'left') {
         this.slideHandler(this.state.currentSlide + this.props.slidesToScroll);
       } else if (swipeDirection === 'right') {
@@ -105,6 +106,7 @@ var EventHandlers = {
         this.slideHandler(this.state.currentSlide, null, true);
       }
     } else {
+      console.log('we are not swiping');
       this.slideHandler(this.state.currentSlide, null, true);
     }
   }

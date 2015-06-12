@@ -2699,7 +2699,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this.state.slideCount <= this.props.slidesToShow && this.props.infinite === false;
 	  },
 	  canSwipe: function (direction) {
-	    console.log('this.state.currentSlide = ' + this.state.currentSlide + ' this.state.slideCount = ' + this.state.slideCount);
+	    console.log('direction = ' + direction + 'this.state.currentSlide = ' + this.state.currentSlide + ' this.state.slideCount = ' + this.state.slideCount);
 	    if (direction === 'left') {
 	      return this.props.infinite === true || this.state.currentSlide !== 0;
 	    } else if (direction === 'right') {
@@ -3948,6 +3948,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    if (touchObject.swipeLength > minSwipe && this.canSwipe(swipeDirection)) {
+	      console.log('we are swiping');
 	      if (swipeDirection === 'left') {
 	        this.slideHandler(this.state.currentSlide + this.props.slidesToScroll);
 	      } else if (swipeDirection === 'right') {
@@ -3956,6 +3957,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.slideHandler(this.state.currentSlide, null, true);
 	      }
 	    } else {
+	      console.log('we are not swiping');
 	      this.slideHandler(this.state.currentSlide, null, true);
 	    }
 	  }
