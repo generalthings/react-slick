@@ -155,14 +155,17 @@ var helpers = {
     var targetLeft, currentLeft;
 
     if (this.state.animating === true) {
+      console.log('already animating code');
       return;
     }
 
     // To prevent the slider from sticking in animating state, If we click on already active dot
     if (this.props.fade === true && this.state.currentSlide === index) {
+      console.log('prevent slider sticking code');
       return;
     }
     if (this.state.slideCount <= this.props.slidesToShow) {
+      console.log('low slideCount code');
       return;
     }
 
@@ -193,6 +196,9 @@ var helpers = {
     if(this.props.afterChange!==null){
       this.props.afterChange(currentSlide);
     }
+
+    console.log('targetLeft = ' + targetLeft);
+    console.log('currentLeft = ' + currentLeft);
 
     var callback = function() {
         this.setState({
