@@ -2696,14 +2696,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return 'vertical';
 	  },
 	  isDraggingDisabled: function () {
-	    return this.props.slideCount <= this.props.slidesToShow && this.props.infinite === false;
+	    return slideCount <= this.props.slidesToShow && this.props.infinite === false;
 	  },
 	  canSwipe: function (direction) {
-	    console.log('this.state.currentSlide = ' + this.state.currentSlide + ' this.props.slideCount = ' + this.props.slideCount);
+	    console.log('this.state.currentSlide = ' + this.state.currentSlide + ' this.state.slideCount = ' + this.state.slideCount);
 	    if (direction === 'left') {
 	      return this.props.infinite === true || this.state.currentSlide !== 0;
 	    } else if (direction === 'right') {
-	      return this.props.infinite === true || this.state.currentSlide !== this.props.slideCount - 1;
+	      return this.props.infinite === true || this.state.currentSlide !== this.state.slideCount - 1;
 	    }
 	    return false;
 	  },
