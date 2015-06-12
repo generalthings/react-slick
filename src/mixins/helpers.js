@@ -39,47 +39,47 @@ var helpers = {
     var targetSlide;
     if (this.props.infinite === true) {
       if (this.state.slideCount > this.props.slidesToShow) {
-       slideOffset = (this.state.slideWidth * this.props.slidesToShow) * -1;
+        slideOffset = (this.state.slideWidth * this.props.slidesToShow) * -1;
       }
       if (this.state.slideCount % this.props.slidesToScroll !== 0) {
         if (slideIndex + this.props.slidesToScroll > this.state.slideCount && this.state.slideCount > this.props.slidesToShow) {
-            if(slideIndex > this.state.slideCount) {
-              slideOffset = ((this.props.slidesToShow - (slideIndex - this.state.slideCount)) * this.state.slideWidth) * -1;
-            } else {
-              slideOffset = ((this.state.slideCount % this.props.slidesToScroll) * this.state.slideWidth) * -1;
-            }
+          if(slideIndex > this.state.slideCount) {
+            slideOffset = ((this.props.slidesToShow - (slideIndex - this.state.slideCount)) * this.state.slideWidth) * -1;
+          } else {
+            slideOffset = ((this.state.slideCount % this.props.slidesToScroll) * this.state.slideWidth) * -1;
+          }
         }
       }
     } else {
 
     }
     if (this.props.centerMode === true && this.props.infinite === true) {
-        slideOffset += this.state.slideWidth * Math.floor(this.props.slidesToShow / 2) - this.state.slideWidth;
+      slideOffset += this.state.slideWidth * Math.floor(this.props.slidesToShow / 2) - this.state.slideWidth;
     } else if (this.props.centerMode === true) {
-        slideOffset = this.state.slideWidth * Math.floor(this.props.slidesToShow / 2);
+      slideOffset = this.state.slideWidth * Math.floor(this.props.slidesToShow / 2);
     }
 
     targetLeft = ((slideIndex * this.state.slideWidth) * -1) + slideOffset;
 
     if (this.props.variableWidth === true) {
-        var targetSlideIndex;
-        if(this.state.slideCount <= this.props.slidesToShow || this.props.infinite === false) {
-            targetSlide = this.refs.track.getDOMNode().childNodes[slideIndex];
+      var targetSlideIndex;
+      if(this.state.slideCount <= this.props.slidesToShow || this.props.infinite === false) {
+        targetSlide = this.refs.track.getDOMNode().childNodes[slideIndex];
+      } else {
+        targetSlideIndex = (slideIndex + this.props.slidesToShow);
+        targetSlide = this.refs.track.getDOMNode().childNodes[targetSlideIndex];
+      }
+      targetLeft = targetSlide ? targetSlide.offsetLeft * -1 : 0;
+      if (this.props.centerMode === true) {
+        if(this.props.infinite === false) {
+          targetSlide = this.refs.track.getDOMNode().childNodes[slideIndex];
         } else {
-            targetSlideIndex = (slideIndex + this.props.slidesToShow);
-            targetSlide = this.refs.track.getDOMNode().childNodes[targetSlideIndex];
+          targetSlide = this.refs.track.getDOMNode().childNodes[(slideIndex + this.props.slidesToShow + 1)];
         }
-        targetLeft = targetSlide ? targetSlide.offsetLeft * -1 : 0;
-        if (this.props.centerMode === true) {
-            if(this.props.infinite === false) {
-                targetSlide = this.refs.track.getDOMNode().childNodes[slideIndex];
-            } else {
-                targetSlide = this.refs.track.getDOMNode().childNodes[(slideIndex + this.props.slidesToShow + 1)];
-            }
 
-            targetLeft = targetSlide ? targetSlide.offsetLeft * -1 : 0;
-            targetLeft += (this.state.listWidth - targetSlide.offsetWidth) / 2;
-        }
+        targetLeft = targetSlide ? targetSlide.offsetLeft * -1 : 0;
+        targetLeft += (this.state.listWidth - targetSlide.offsetWidth) / 2;
+      }
     }
 
     return targetLeft;
@@ -195,11 +195,11 @@ var helpers = {
     }
 
     var callback = function() {
-        this.setState({
-          animating: false,
-          trackStyle: this.getCSS(currentLeft),
-          swipeLeft: null
-        });
+      this.setState({
+        animating: false,
+        trackStyle: this.getCSS(currentLeft),
+        swipeLeft: null
+      });
     }.bind(this);
 
     this.setState({
@@ -223,19 +223,30 @@ var helpers = {
 
     swipeAngle = Math.round(r * 180 / Math.PI);
     if (swipeAngle < 0) {
-        swipeAngle = 360 - Math.abs(swipeAngle);
+      swipeAngle = 360 - Math.abs(swipeAngle);
     }
     if ((swipeAngle <= 45) && (swipeAngle >= 0)) {
-        return (this.props.rtl === false ? 'left' : 'right');
+      return (this.props.rtl === false ? 'left' : 'right');
     }
     if ((swipeAngle <= 360) && (swipeAngle >= 315)) {
-        return (this.props.rtl === false ? 'left' : 'right');
+      return (this.props.rtl === false ? 'left' : 'right');
     }
     if ((swipeAngle >= 135) && (swipeAngle <= 225)) {
-        return (this.props.rtl === false ? 'right' : 'left');
+      return (this.props.rtl === false ? 'right' : 'left');
     }
 
     return 'vertical';
+  },
+  isDraggingDisabled: function () {
+    return this.state.slideCount <= this.props.slidesToShow && this.props.infinite === false;
+  },
+  canSwipe: function (direction) {
+    if (direction === 'left') {
+      return this.props.infinite === true || this.state.currentSlide !== this.state.slideCount - 1;
+    } else if (direction === 'right') {
+      return this.props.infinite === true || this.state.currentSlide !== 0;
+    }
+    return false;
   },
   autoPlay: function () {
     var play = function () {

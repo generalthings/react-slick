@@ -56,12 +56,13 @@ var EventHandlers = {
     });
   },
   swipeMove: function (e) {
-    if (!this.state.dragging) {
+    if (this.isDraggingDisabled()) {
+      e.preventDefault();
+    }
+    if (!this.state.dragging || this.state.animating || this.isDraggingDisabled()) {
       return;
     }
-    if (this.state.animating) {
-      return;
-    }
+
     var swipeLeft;
     var curLeft, positionOffset;
     var touchObject = this.state.touchObject;
@@ -95,7 +96,7 @@ var EventHandlers = {
       touchObject: {}
     });
 
-    if (touchObject.swipeLength > minSwipe) {
+    if (touchObject.swipeLength > minSwipe && this.canSwipe(swipeDirection)) {
       if (swipeDirection === 'left') {
         this.slideHandler(this.state.currentSlide + this.props.slidesToScroll);
       } else if (swipeDirection === 'right') {
