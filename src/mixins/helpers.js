@@ -247,11 +247,11 @@ var helpers = {
     return this.state.slideCount <= this.props.slidesToShow && this.props.infinite === false;
   },
   canSwipe: function (direction) {
-    console.log('direction = ' + direction + 'this.state.currentSlide = ' + this.state.currentSlide + ' this.state.slideCount = ' + this.state.slideCount);
+    console.log('direction = ' + direction + ' this.state.currentSlide = ' + this.state.currentSlide + ' this.state.slideCount = ' + this.state.slideCount);
     if (direction === 'left') {
-      return this.props.infinite === true || this.state.currentSlide !== 0;
-    } else if (direction === 'right') {
       return this.props.infinite === true || this.state.currentSlide !== this.state.slideCount - 1;
+    } else if (direction === 'right') {
+      return this.props.infinite === true || this.state.currentSlide !== 0;
     }
     return false;
   },
