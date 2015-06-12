@@ -237,6 +237,17 @@ var helpers = {
 
     return 'vertical';
   },
+  isDraggingDisabled: function () {
+    return this.props.slideCount <= this.props.slidesToShow && this.props.infinite === false;
+  },
+  canSwipe: function (direction) {
+    if (direction === 'left') {
+      return this.props.infinite === true || this.state.currentSlide !== 0;
+    } else if (direction === 'right') {
+      return this.props.infinite === true || this.state.currentSlide !== this.props.slideCount - 1;
+    }
+    return false;
+  },
   autoPlay: function () {
     var play = function () {
       if (this.isMounted()) {
